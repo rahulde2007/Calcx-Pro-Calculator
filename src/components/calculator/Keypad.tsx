@@ -216,38 +216,42 @@ export const Keypad: React.FC<KeypadProps> = React.memo(({
   ]);
 
   return (
-    <div role="group" aria-label="Calculator Keypad" className="flex flex-col gap-2.5 xs:gap-3 sm:gap-4 w-full flex-1 min-h-0">
-      {/* Expression Utilities Row */}
-      <div className="grid grid-cols-4 gap-2.5 xs:gap-3 sm:gap-4 w-full shrink-0">
-        {UTILITY_BUTTONS.map((btn) => (
-          <CalculatorButton
-            key={btn.id}
-            id={btn.id}
-            label={btn.label}
-            ariaLabel={btn.ariaLabel}
-            variant={btn.variant}
-            spanCols={btn.spanCols}
-            className="h-9 xs:h-10 sm:h-11 text-sm xs:text-base font-semibold"
-            onClick={handlers[btn.id]}
-          />
-        ))}
-      </div>
+    <div
+      role="group"
+      aria-label="Calculator Keypad"
+      className="grid grid-cols-4 gap-2.5 xs:gap-3 sm:gap-3.5 w-full flex-1 min-h-0"
+      style={{
+        gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+        gridTemplateRows: 'repeat(6, minmax(0, 1fr))',
+      }}
+    >
+      {/* Expression Utilities Row (Grid Row 1) */}
+      {UTILITY_BUTTONS.map((btn) => (
+        <CalculatorButton
+          key={btn.id}
+          id={btn.id}
+          label={btn.label}
+          ariaLabel={btn.ariaLabel}
+          variant={btn.variant}
+          spanCols={btn.spanCols}
+          className="text-sm xs:text-base font-semibold"
+          onClick={handlers[btn.id]}
+        />
+      ))}
 
-      {/* Main Arithmetic Grid — flex-1 so rows grow to fill with reference neumorphic spacing */}
-      <div className="grid grid-cols-4 gap-2.5 xs:gap-3 sm:gap-4 w-full flex-1 min-h-0" style={{ gridAutoRows: '1fr' }}>
-        {MAIN_KEYPAD_BUTTONS.map((btn) => (
-          <CalculatorButton
-            key={btn.id}
-            id={btn.id}
-            label={btn.label}
-            ariaLabel={btn.ariaLabel}
-            variant={btn.variant}
-            spanCols={btn.spanCols}
-            className="h-full min-h-0 text-base xs:text-lg sm:text-xl"
-            onClick={handlers[btn.id]}
-          />
-        ))}
-      </div>
+      {/* Main Arithmetic Grid (Grid Rows 2–6) */}
+      {MAIN_KEYPAD_BUTTONS.map((btn) => (
+        <CalculatorButton
+          key={btn.id}
+          id={btn.id}
+          label={btn.label}
+          ariaLabel={btn.ariaLabel}
+          variant={btn.variant}
+          spanCols={btn.spanCols}
+          className="text-base xs:text-lg sm:text-xl"
+          onClick={handlers[btn.id]}
+        />
+      ))}
     </div>
   );
 });

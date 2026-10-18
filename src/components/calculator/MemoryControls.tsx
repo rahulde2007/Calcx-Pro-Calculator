@@ -25,13 +25,14 @@ export const MemoryControls: React.FC<MemoryControlsProps> = React.memo(({
   isCompact = false,
 }) => {
   const btnHeightClass = isCompact ? 'h-7 sm:h-8 text-[11px]' : 'h-8 sm:h-9 text-xs sm:text-sm';
-  const gapClass = isCompact ? 'gap-1.5 xs:gap-2' : 'gap-2 sm:gap-3';
+  const gapClass = isCompact ? 'gap-1.5 xs:gap-2' : 'gap-2.5 xs:gap-3 sm:gap-3.5';
 
   return (
     <div
       role="group"
       aria-label="Memory Controls"
       className={`grid grid-cols-4 ${gapClass} w-full ${className}`}
+      style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}
     >
       <CalculatorButton
         id="btn-mc"

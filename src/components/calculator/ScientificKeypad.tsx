@@ -400,7 +400,7 @@ export const ScientificKeypad: React.FC<ScientificKeypadProps> = React.memo(({
         <div
           key={`sci-row-${rowIndex}`}
           className="grid grid-cols-4 gap-1.5 xs:gap-2 w-full flex-1 min-h-0"
-          style={{ gridAutoRows: '1fr' }}
+          style={{ gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gridAutoRows: '1fr' }}
         >
           {row.map((btn) => (
             <CalculatorButton

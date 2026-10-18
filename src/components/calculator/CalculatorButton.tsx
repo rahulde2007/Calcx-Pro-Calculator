@@ -28,10 +28,10 @@ const VARIANT_STYLES: Record<ButtonVariant, string> = {
 };
 
 const SPAN_CLASSES: Record<number, string> = {
-  1: 'col-span-1 aspect-square',
-  2: 'col-span-2 aspect-auto rounded-full px-5 justify-start',
-  3: 'col-span-3 aspect-auto rounded-full px-5',
-  4: 'col-span-4 aspect-auto rounded-full px-6',
+  1: 'col-span-1',
+  2: 'col-span-2 rounded-full px-5 justify-start',
+  3: 'col-span-3 rounded-full px-5',
+  4: 'col-span-4 rounded-full px-6',
 };
 
 /**
@@ -56,9 +56,12 @@ export const CalculatorButton: React.FC<CalculatorButtonProps> = React.memo(({
   const isEquals = variant === 'equals';
   const isDot = id === 'btn-decimal' || label === '.';
 
-  // Sizing: default aspect-square or stretch for spanned rows
-  const hasCustomHeight = Boolean(className && (className.includes('h-') || className.includes('min-h-')));
-  const defaultHeightClass = hasCustomHeight ? '' : (spanCols > 1 ? 'h-12 xs:h-13 sm:h-14' : 'w-full');
+  // Sizing: ensure consistent 100% cell width and full cell height in grid
+  const hasCustomWidth = Boolean(className && (className.includes('w-') || className.includes('min-w-') || className.includes('max-w-')));
+  const defaultWidthClass = hasCustomWidth ? '' : 'w-full';
+
+  const hasCustomHeight = Boolean(className && (className.includes('h-') || className.includes('min-h-') || className.includes('max-h-')));
+  const defaultHeightClass = hasCustomHeight ? '' : 'h-full min-h-0';
 
   const hasCustomText = Boolean(className && className.includes('text-'));
   const defaultTextClass = hasCustomText ? '' : (isDot ? 'font-orbitron font-bold text-2xl pb-1' : 'text-base sm:text-lg');
@@ -74,6 +77,7 @@ export const CalculatorButton: React.FC<CalculatorButtonProps> = React.memo(({
         neumorphic-btn
         ${isEquals ? 'neumorphic-btn-equals' : ''}
         group relative flex items-center justify-center
+        ${defaultWidthClass}
         ${defaultHeightClass}
         ${SPAN_CLASSES[spanCols] ?? 'col-span-1'}
         ${VARIANT_STYLES[variant]}
