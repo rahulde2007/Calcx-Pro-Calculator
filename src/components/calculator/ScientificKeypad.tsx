@@ -394,12 +394,12 @@ export const ScientificKeypad: React.FC<ScientificKeypadProps> = React.memo(({
     <div
       role="group"
       aria-label="Scientific Calculator Keypad"
-      className="flex flex-col gap-1 xs:gap-1.5 w-full flex-1 min-h-0"
+      className="flex flex-col gap-1.5 xs:gap-2 w-full flex-1 min-h-0"
     >
       {SCIENTIFIC_KEYPAD_ROWS.map((row, rowIndex) => (
         <div
           key={`sci-row-${rowIndex}`}
-          className="grid grid-cols-4 gap-1 xs:gap-1.5 w-full flex-1 min-h-0"
+          className="grid grid-cols-4 gap-1.5 xs:gap-2 w-full flex-1 min-h-0"
           style={{ gridAutoRows: '1fr' }}
         >
           {row.map((btn) => (

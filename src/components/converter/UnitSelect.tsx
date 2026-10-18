@@ -21,7 +21,6 @@ export const UnitSelect: React.FC<UnitSelectProps> = ({
 
   let content: React.ReactNode;
   if (hasGroups) {
-    // Collect distinct groups
     const groups: Record<string, UnitDefinition[]> = {};
     const ungrouped: UnitDefinition[] = [];
 
@@ -38,16 +37,16 @@ export const UnitSelect: React.FC<UnitSelectProps> = ({
     content = (
       <>
         {Object.entries(groups).map(([groupName, groupUnits]) => (
-          <optgroup key={groupName} label={groupName} className="bg-calc-surface text-calc-text-primary font-semibold">
+          <optgroup key={groupName} label={groupName} className="bg-[var(--bg-color)] text-[var(--text-color)] font-semibold">
             {groupUnits.map((u) => (
-              <option key={u.id} value={u.id} className="bg-calc-surface text-calc-text-primary font-normal">
+              <option key={u.id} value={u.id} className="bg-[var(--bg-color)] text-[var(--text-color)] font-normal">
                 {u.label} ({u.symbol})
               </option>
             ))}
           </optgroup>
         ))}
         {ungrouped.map((u) => (
-          <option key={u.id} value={u.id} className="bg-calc-surface text-calc-text-primary font-normal">
+          <option key={u.id} value={u.id} className="bg-[var(--bg-color)] text-[var(--text-color)] font-normal">
             {u.label} ({u.symbol})
           </option>
         ))}
@@ -55,7 +54,7 @@ export const UnitSelect: React.FC<UnitSelectProps> = ({
     );
   } else {
     content = units.map((u) => (
-      <option key={u.id} value={u.id} className="bg-calc-surface text-calc-text-primary font-normal">
+      <option key={u.id} value={u.id} className="bg-[var(--bg-color)] text-[var(--text-color)] font-normal">
         {u.label} ({u.symbol})
       </option>
     ));
@@ -63,7 +62,7 @@ export const UnitSelect: React.FC<UnitSelectProps> = ({
 
   return (
     <div className="flex flex-col gap-1 w-full min-w-0">
-      <label htmlFor={id} className="text-[11px] font-semibold uppercase tracking-wider text-calc-text-secondary">
+      <label htmlFor={id} className="font-orbitron text-[10px] font-bold uppercase tracking-wider text-[var(--history-color)]">
         {label}
       </label>
       <div className="relative">
@@ -72,15 +71,14 @@ export const UnitSelect: React.FC<UnitSelectProps> = ({
           value={value}
           onChange={(e) => onChange(e.target.value as UnitId)}
           className="
-            w-full min-h-[40px] xs:min-h-[42px] sm:min-h-[44px] px-2.5 xs:px-3 py-1.5 pr-7 xs:pr-8 rounded-calc-md border border-calc-border-subtle
-            bg-calc-surface-secondary hover:bg-calc-surface-elevated text-calc-text-primary
-            text-xs xs:text-sm font-medium transition-colors appearance-none cursor-pointer truncate
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+            w-full min-h-[40px] xs:min-h-[42px] px-3 py-1.5 pr-8 rounded-2xl neumorphic-inset
+            text-[var(--text-color)] text-xs xs:text-sm font-poppins font-medium transition-all appearance-none cursor-pointer truncate
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
           "
         >
           {content}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-calc-text-muted">
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-[var(--history-color)]">
           <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>

@@ -13,7 +13,7 @@ export interface DisplayProps {
   readonly livePreview?: string | null | undefined;
 }
 
-// Dynamically scale typography based on number length to prevent overflow (static utility)
+// Dynamically scale typography based on number length to prevent overflow
 function getDynamicFontSize(str: string, compact: boolean): string {
   const len = str.length;
   if (compact) {
@@ -21,7 +21,7 @@ function getDynamicFontSize(str: string, compact: boolean): string {
     if (len > 14) return 'text-xl sm:text-2xl';
     if (len > 10) return 'text-2xl sm:text-3xl';
     if (len > 7) return 'text-3xl sm:text-4xl';
-    return 'text-3xl xs:text-4xl sm:text-[2.6rem]';
+    return 'text-3xl xs:text-4xl sm:text-[2.5rem]';
   }
   if (len > 18) return 'text-xl sm:text-2xl';
   if (len > 14) return 'text-2xl sm:text-3xl';
@@ -31,9 +31,9 @@ function getDynamicFontSize(str: string, compact: boolean): string {
 }
 
 /**
- * Premium Calculator Display.
- * Features responsive typography scaling, expression history, status badges (DEG/RAD, M),
- * long-number overflow protection, memoization, and accessible live regions.
+ * Frosted Glass Display with digital reflection matching reference design.
+ * Features glassmorphism backdrop-blur, subtle inner glow, diagonal sheen beam animation,
+ * Orbitron typography, DEG/RAD badges, memory indicator, and live preview.
  */
 export const Display: React.FC<DisplayProps> = React.memo(({
   expression = '',
@@ -50,28 +50,28 @@ export const Display: React.FC<DisplayProps> = React.memo(({
 
   const displayText = isError ? (errorMessage ?? 'Error') : value;
   const fontSizeClass = isError
-    ? (isCompact ? 'text-xl sm:text-2xl font-medium text-calc-error' : 'text-2xl sm:text-3xl font-medium text-calc-error')
-    : `${getDynamicFontSize(displayText, isCompact)} font-semibold text-calc-text-primary`;
+    ? (isCompact ? 'text-xl sm:text-2xl font-medium text-[var(--ac-color)]' : 'text-2xl sm:text-3xl font-medium text-[var(--ac-color)]')
+    : `${getDynamicFontSize(displayText, isCompact)} font-bold text-[var(--text-color)]`;
 
   return (
     <div
       role="region"
       aria-label="Calculator Display"
       className={`
-        group relative w-full rounded-calc-lg bg-calc-surface border border-calc-border-subtle
-        shadow-calc-display flex flex-col justify-between shrink-0
-        ${isCompact
-          ? 'p-2 xs:p-2.5 sm:p-3'
-          : 'p-3 sm:p-4'}
+        neumorphic-display rounded-[20px] flex flex-col justify-between shrink-0
+        ${isCompact ? 'p-2.5 xs:p-3 sm:p-3.5 min-h-[96px]' : 'p-3.5 sm:p-4 min-h-[110px]'}
       `}
     >
-      {/* Top Status & Expression Row */}
-      <div className={`flex items-center justify-between gap-2 select-none ${isCompact ? 'mb-1 sm:mb-1.5' : 'mb-2'}`}>
+      {/* Digital Glass Reflection Sheen */}
+      <div className="glass-reflection" aria-hidden="true" />
+
+      {/* Top Status & Expression History Row */}
+      <div className={`relative z-10 flex items-center justify-between gap-2 select-none ${isCompact ? 'mb-1' : 'mb-2'}`}>
         {/* Indicators on the left */}
         <div className="flex items-center gap-1.5">
           {modeBadge && (
             <span
-              className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-calc-surface-secondary border border-calc-border-subtle text-calc-text-muted uppercase tracking-wider"
+              className="text-[10px] font-orbitron font-semibold px-2 py-0.5 rounded-full bg-[var(--bg-color)]/60 border border-[var(--glass-border)] text-[var(--history-color)] uppercase tracking-wider shadow-sm"
               aria-label={`Angle mode: ${modeBadge}`}
             >
               {modeBadge}
@@ -79,7 +79,7 @@ export const Display: React.FC<DisplayProps> = React.memo(({
           )}
           {isMemoryActive && (
             <span
-              className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-calc-accent tracking-wider shadow-sm"
+              className="text-[10px] font-orbitron font-bold px-2 py-0.5 rounded-full bg-[var(--op-right-color)]/20 border border-[var(--op-right-color)]/40 text-[var(--op-right-color)] tracking-wider shadow-sm"
               aria-label={memoryValue !== undefined ? `Memory stored: ${memoryValue}` : 'Memory stored'}
             >
               M
@@ -89,23 +89,27 @@ export const Display: React.FC<DisplayProps> = React.memo(({
 
         {/* Expression buffer */}
         <div
-          className="flex-1 text-right font-mono-calc text-xs sm:text-sm text-calc-text-secondary tracking-wider overflow-x-auto whitespace-nowrap scrollbar-none pl-2"
+          id="history"
+          className="flex-1 text-right font-orbitron text-xs sm:text-[14px] text-[var(--history-color)] tracking-[2px] font-medium overflow-x-auto whitespace-nowrap scrollbar-none pl-2 transition-colors duration-500"
           aria-label={`Current expression: ${expression || 'none'}`}
         >
           {expression || '\u00A0'}
         </div>
       </div>
 
-      {/* Main Result Display */}
+      {/* Main Result Value Display */}
       <div
-        className="relative flex flex-col items-end w-full overflow-hidden"
+        id="value"
+        className="relative z-10 flex flex-col items-end w-full overflow-hidden"
         aria-live="polite"
         aria-atomic="true"
       >
         <span
           className={`
-            font-mono-calc tracking-tight text-right
+            font-orbitron tracking-[1px] text-right
             select-all overflow-x-auto whitespace-nowrap scrollbar-none
+            dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.18)]
+            transition-colors duration-500
             ${fontSizeClass}
           `}
         >
@@ -116,9 +120,9 @@ export const Display: React.FC<DisplayProps> = React.memo(({
         {livePreview && !isError && (
           <span
             className={`
-              font-mono-calc tracking-tight text-right text-calc-accent
-              overflow-x-auto whitespace-nowrap scrollbar-none opacity-85
-              ${isCompact ? 'text-base xs:text-lg' : 'text-lg sm:text-xl'}
+              font-orbitron tracking-wide text-right text-[var(--op-right-color)]
+              overflow-x-auto whitespace-nowrap scrollbar-none opacity-90
+              ${isCompact ? 'text-sm xs:text-base' : 'text-base sm:text-lg'}
             `}
             aria-label={`Live result: ${livePreview}`}
           >
@@ -126,9 +130,6 @@ export const Display: React.FC<DisplayProps> = React.memo(({
           </span>
         )}
       </div>
-
-      {/* Subtle bottom glow reflection bar */}
-      <div className="absolute bottom-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-calc-accent/20 to-transparent pointer-events-none" />
     </div>
   );
 });

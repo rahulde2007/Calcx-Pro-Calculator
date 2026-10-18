@@ -15,7 +15,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
   return (
     <nav
       aria-label="Unit Categories"
-      className="w-full overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-calc-border-subtle"
+      className="w-full overflow-x-auto pb-1.5 scrollbar-thin"
     >
       <div className="flex items-center gap-1.5 min-w-max">
         {categories.map((cat) => {
@@ -30,12 +30,12 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({
               aria-controls={`converter-panel-${cat.id}`}
               onClick={() => onSelectCategory(cat.id)}
               className={`
-                min-h-[36px] xs:min-h-[38px] px-2.5 py-1 rounded-calc-md text-[11px] font-medium transition-all duration-150 flex items-center gap-1 select-none whitespace-nowrap
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+                min-h-[34px] px-3 py-1 rounded-full text-[11px] font-orbitron font-medium transition-all duration-150 flex items-center gap-1 select-none whitespace-nowrap
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
                 ${
                   isSelected
-                    ? 'bg-calc-accent text-white shadow-calc-button font-semibold'
-                    : 'bg-calc-surface-secondary text-calc-text-secondary hover:text-calc-text-primary hover:bg-calc-surface-elevated border border-calc-border-subtle'
+                    ? 'bg-[var(--op-right-color)] text-white shadow-sm font-bold'
+                    : 'neumorphic-btn text-[var(--history-color)] hover:text-[var(--text-color)]'
                 }
               `}
             >

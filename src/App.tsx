@@ -12,12 +12,11 @@ import type { CalculationHistoryItem } from './types/calculator';
 /**
  * Calcx-Pro Root Shell.
  * Integrates the fully interactive calculation engine with the UI shell,
- * real-time calculation history, physical keyboard support, and theme/settings management.
- * Optimized for 60fps interaction and zero layout shifts.
+ * real-time calculation history, physical keyboard support, and reference Neumorphic styling.
  */
 export const App: React.FC = () => {
   const calculator = useCalculator();
-  useTheme(calculator.state.themePreference);
+  const { resolvedTheme } = useTheme(calculator.state.themePreference);
 
   const [isKeyboardHelpOpen, setIsKeyboardHelpOpen] = useState<boolean>(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
@@ -38,6 +37,27 @@ export const App: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isHistoryOpen, isConverterOpen, isKeyboardHelpOpen, isSettingsOpen]);
+
+  const handleToggleThemeSwitch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const nextIsDark = e.target.checked;
+    calculator.setThemePreference(nextIsDark ? 'dark' : 'light');
+
+    // Trigger reference browser reflow animations
+    const calcBody = document.querySelector('.calculator');
+    const displayArea = document.querySelector('.neumorphic-display');
+
+    if (calcBody) {
+      calcBody.classList.remove('animate-switch');
+      void (calcBody as HTMLElement).offsetWidth;
+      calcBody.classList.add('animate-switch');
+    }
+
+    if (displayArea) {
+      displayArea.classList.remove('animate-flare');
+      void (displayArea as HTMLElement).offsetWidth;
+      displayArea.classList.add('animate-flare');
+    }
+  }, [calculator]);
 
   const handleToggleConverter = useCallback(() => {
     setIsConverterOpen((prev) => !prev);
@@ -73,40 +93,45 @@ export const App: React.FC = () => {
 
   const handleSelectHistoryItem = useCallback((item: CalculationHistoryItem) => {
     calculator.loadHistoryItem(item);
-  }, [calculator.loadHistoryItem]);
+  }, [calculator]);
 
   const handleClearHistory = useCallback(() => {
     calculator.clearHistory();
-  }, [calculator.clearHistory]);
+  }, [calculator]);
 
   const handleDeleteHistoryItem = useCallback((id: string) => {
     calculator.deleteHistoryItem(id);
-  }, [calculator.deleteHistoryItem]);
+  }, [calculator]);
 
   const historyLength = calculator.state.history.length;
+  const isDark = resolvedTheme === 'dark';
 
   return (
-    <div className="h-screen overflow-hidden bg-calc-bg text-calc-text-primary flex flex-col selection:bg-calc-accent/30 selection:text-white">
+    <div className="relative h-screen overflow-hidden bg-[var(--bg-color)] text-[var(--text-color)] flex flex-col transition-colors duration-600">
+      {/* Reference Glowing Orbs Background */}
+      <div className="orb orb-1" aria-hidden="true" />
+      <div className="orb orb-2" aria-hidden="true" />
+
       {/* Top Application Bar */}
-      <header className="border-b border-calc-border-subtle bg-calc-surface/40 backdrop-blur-xl sticky top-0 z-30 px-3 xs:px-4 sm:px-8 py-2.5 sm:py-3.5">
+      <header className="border-b border-black/5 dark:border-white/5 bg-[var(--bg-color)]/70 backdrop-blur-xl sticky top-0 z-30 px-3 xs:px-4 sm:px-8 py-2 sm:py-3 transition-colors duration-600">
         <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
           {/* Brand Logo */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3">
             <img
               src="/icons/icon-09.gif"
               alt="Calcx-Pro Logo"
-              className="h-9 sm:h-10 w-auto object-contain shrink-0 select-none dark:mix-blend-screen"
+              className="h-8 sm:h-9 w-auto object-contain shrink-0 select-none dark:mix-blend-screen"
             />
             <div>
-              <h1 className="text-base sm:text-lg font-bold tracking-tight text-calc-text-primary">
-                Calcx<span className="text-calc-accent">Pro</span>
+              <h1 className="text-base sm:text-lg font-orbitron font-bold tracking-tight text-[var(--text-color)]">
+                Calcx<span className="text-[var(--op-right-color)] ml-0.5">Pro</span>
               </h1>
-              <p className="text-[11px] text-calc-text-secondary">Precision Engineering Calculator</p>
+              <p className="text-[10px] sm:text-[11px] font-poppins text-[var(--history-color)]">Precision Engineering Calculator</p>
             </div>
           </div>
 
           {/* Right Action Utilities */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-2.5">
             <IconButton
               ariaLabel={
                 historyLength > 0
@@ -120,7 +145,7 @@ export const App: React.FC = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
+                className="h-3.5 w-3.5 sm:h-4 sm:w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -132,7 +157,7 @@ export const App: React.FC = () => {
               </svg>
               <span className="text-xs font-medium px-1 hidden sm:inline">History</span>
               {historyLength > 0 && (
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-calc-accent/20 text-calc-accent font-bold ml-0.5">
+                <span className="text-[10px] font-orbitron px-1.5 py-0.2 rounded-full bg-[var(--op-right-color)]/20 text-[var(--op-right-color)] font-bold ml-0.5">
                   {historyLength}
                 </span>
               )}
@@ -158,7 +183,7 @@ export const App: React.FC = () => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
+                className="h-3.5 w-3.5 sm:h-4 sm:w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -183,8 +208,25 @@ export const App: React.FC = () => {
       </header>
 
       {/* Main Interactive Stage */}
-      <main className="flex-1 min-h-0 w-full overflow-hidden flex flex-col items-center justify-center px-3 xs:px-4 sm:px-6 py-2 xs:py-2.5 sm:py-4">
-        <div className="w-full max-w-[360px] xs:max-w-[390px] sm:max-w-[440px] flex-1 min-h-0 flex flex-col">
+      <main className="flex-1 min-h-0 w-full overflow-hidden flex flex-col items-center justify-center px-3 xs:px-4 sm:px-6 py-2 xs:py-2.5 sm:py-3.5 z-10">
+        {/* Reference Neumorphic Theme Switch Wrapper */}
+        <div className="theme-switch-wrapper mb-2.5 sm:mb-3.5 select-none">
+          <span className="theme-label" id="theme-label">
+            {isDark ? 'PRO MODE' : 'NORMAL MODE'}
+          </span>
+          <label className="theme-switch" htmlFor="theme-checkbox" aria-label="Toggle theme mode">
+            <input
+              type="checkbox"
+              id="theme-checkbox"
+              checked={isDark}
+              onChange={handleToggleThemeSwitch}
+              aria-labelledby="theme-label"
+            />
+            <div className="slider round" />
+          </label>
+        </div>
+
+        <div className="w-full max-w-[340px] xs:max-w-[370px] sm:max-w-[420px] flex-1 min-h-0 flex flex-col">
           {/* Main Stage: Connected Calculator Shell */}
           <section aria-label="Interactive Calculator" className="w-full flex-1 min-h-0 flex flex-col">
             <Calculator
@@ -203,14 +245,14 @@ export const App: React.FC = () => {
           role="dialog"
           aria-modal="true"
           aria-label="Calculation History"
-          className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm transition-opacity duration-200"
+          className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-sm transition-opacity duration-200"
           onClick={(e) => {
             if (e.target === e.currentTarget) handleCloseHistory();
           }}
         >
           <div
             className="
-              relative w-full max-w-full sm:max-w-md h-full bg-calc-surface border-l border-calc-border-subtle
+              relative w-full max-w-full sm:max-w-md h-full bg-[var(--bg-color)] border-l border-white/5
               shadow-2xl flex flex-col p-4 sm:p-5 overflow-hidden transition-transform duration-200
             "
           >
@@ -232,7 +274,7 @@ export const App: React.FC = () => {
           role="dialog"
           aria-modal="true"
           aria-label="Unit Converter"
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 xs:p-4 sm:p-6 bg-black/60 backdrop-blur-sm transition-opacity duration-200 overflow-y-auto"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 xs:p-4 sm:p-6 bg-black/50 backdrop-blur-sm transition-opacity duration-200 overflow-y-auto"
           onClick={(e) => {
             if (e.target === e.currentTarget) handleCloseConverter();
           }}
@@ -240,8 +282,8 @@ export const App: React.FC = () => {
           <div
             className="
               relative w-full max-w-[360px] xs:max-w-[390px] sm:max-w-[440px]
-              rounded-calc-shell bg-calc-surface border border-calc-border-subtle
-              shadow-calc-shell p-3.5 xs:p-4 sm:p-5 flex flex-col my-auto
+              rounded-[35px] bg-[var(--bg-color)] border border-white/5
+              shadow-calc-shell p-4 sm:p-5 flex flex-col my-auto
             "
           >
             <UnitConverter
@@ -258,38 +300,38 @@ export const App: React.FC = () => {
         onClose={handleCloseShortcuts}
         title="Physical Keyboard Shortcuts"
       >
-        <div className="space-y-3 text-xs text-calc-text-secondary">
-          <div className="grid grid-cols-2 gap-2 text-calc-text-primary">
-            <div className="p-2 rounded bg-calc-surface-secondary border border-calc-border-subtle">
-              <span className="font-mono text-calc-accent font-semibold">0 – 9</span>
-              <p className="text-[11px] text-calc-text-muted mt-0.5">Numeric Input / NumPad</p>
+        <div className="space-y-3 text-xs text-[var(--history-color)]">
+          <div className="grid grid-cols-2 gap-2 text-[var(--text-color)]">
+            <div className="p-2 rounded-xl neumorphic-inset">
+              <span className="font-orbitron text-[var(--op-right-color)] font-semibold">0 – 9</span>
+              <p className="text-[11px] text-[var(--history-color)] mt-0.5">Numeric Input / NumPad</p>
             </div>
-            <div className="p-2 rounded bg-calc-surface-secondary border border-calc-border-subtle">
-              <span className="font-mono text-calc-accent font-semibold">+ − * / %</span>
-              <p className="text-[11px] text-calc-text-muted mt-0.5">Operators</p>
+            <div className="p-2 rounded-xl neumorphic-inset">
+              <span className="font-orbitron text-[var(--op-right-color)] font-semibold">+ − * / %</span>
+              <p className="text-[11px] text-[var(--history-color)] mt-0.5">Operators</p>
             </div>
-            <div className="p-2 rounded bg-calc-surface-secondary border border-calc-border-subtle">
-              <span className="font-mono text-calc-accent font-semibold">^  !</span>
-              <p className="text-[11px] text-calc-text-muted mt-0.5">Power & Factorial</p>
+            <div className="p-2 rounded-xl neumorphic-inset">
+              <span className="font-orbitron text-[var(--op-right-color)] font-semibold">^  !</span>
+              <p className="text-[11px] text-[var(--history-color)] mt-0.5">Power & Factorial</p>
             </div>
-            <div className="p-2 rounded bg-calc-surface-secondary border border-calc-border-subtle">
-              <span className="font-mono text-calc-accent font-semibold">( )</span>
-              <p className="text-[11px] text-calc-text-muted mt-0.5">Parentheses Grouping</p>
+            <div className="p-2 rounded-xl neumorphic-inset">
+              <span className="font-orbitron text-[var(--op-right-color)] font-semibold">( )</span>
+              <p className="text-[11px] text-[var(--history-color)] mt-0.5">Parentheses Grouping</p>
             </div>
-            <div className="p-2 rounded bg-calc-surface-secondary border border-calc-border-subtle">
-              <span className="font-mono text-calc-accent font-semibold">Enter / =</span>
-              <p className="text-[11px] text-calc-text-muted mt-0.5">Calculate Result</p>
+            <div className="p-2 rounded-xl neumorphic-inset">
+              <span className="font-orbitron text-[var(--op-right-color)] font-semibold">Enter / =</span>
+              <p className="text-[11px] text-[var(--history-color)] mt-0.5">Calculate Result</p>
             </div>
-            <div className="p-2 rounded bg-calc-surface-secondary border border-calc-border-subtle">
-              <span className="font-mono text-calc-accent font-semibold">Backspace</span>
-              <p className="text-[11px] text-calc-text-muted mt-0.5">Delete Character</p>
+            <div className="p-2 rounded-xl neumorphic-inset">
+              <span className="font-orbitron text-[var(--op-right-color)] font-semibold">Backspace</span>
+              <p className="text-[11px] text-[var(--history-color)] mt-0.5">Delete Character</p>
             </div>
-            <div className="p-2 rounded bg-calc-surface-secondary border border-calc-border-subtle">
-              <span className="font-mono text-calc-accent font-semibold">Escape</span>
-              <p className="text-[11px] text-calc-text-muted mt-0.5">All Clear (AC)</p>
+            <div className="p-2 rounded-xl neumorphic-inset">
+              <span className="font-orbitron text-[var(--ac-color)] font-semibold">Escape</span>
+              <p className="text-[11px] text-[var(--history-color)] mt-0.5">All Clear (AC)</p>
             </div>
           </div>
-          <p className="text-[11px] text-calc-text-muted pt-2 border-t border-calc-border-subtle">
+          <p className="text-[11px] text-[var(--history-color)] pt-2 border-t border-black/5 dark:border-white/5 font-poppins">
             NumPad keys on desktop keyboards are fully supported.
           </p>
         </div>
@@ -308,13 +350,13 @@ export const App: React.FC = () => {
       />
 
       {/* Application Footer */}
-      <footer className="shrink-0 border-t border-calc-border-subtle bg-calc-surface/30 py-2 px-4 sm:px-8 text-center text-xs text-calc-text-muted select-none">
+      <footer className="shrink-0 border-t border-black/5 dark:border-white/5 bg-[var(--bg-color)]/70 backdrop-blur-md py-2 px-4 sm:px-8 text-center text-xs text-[var(--history-color)] select-none transition-colors duration-600 z-10">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-2 font-mono text-[11px]">
+          <div className="flex items-center gap-2 font-orbitron text-[10px] sm:text-[11px]">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
             <span>Interactive Shunting-Yard Engine &bull; Zero `eval()` &bull; Strict TypeScript</span>
           </div>
-          <span className="text-[11px] font-mono">Calcx-Pro &copy; 2026</span>
+          <span className="text-[10px] sm:text-[11px] font-orbitron">Calcx-Pro &copy; 2026</span>
         </div>
       </footer>
     </div>

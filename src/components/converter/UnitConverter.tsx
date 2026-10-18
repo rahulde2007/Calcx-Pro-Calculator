@@ -38,7 +38,6 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
     lastFetched: null,
   });
 
-
   // Available units for current category
   const availableUnits = useMemo(
     () => getUnitsForCategory(selectedCategoryId),
@@ -138,16 +137,16 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
       aria-label="Unit Converter"
       className={`
         w-full flex flex-col
-        ${className ?? 'rounded-calc-shell border border-calc-border-subtle p-3.5 xs:p-4 sm:p-5 shadow-calc-shell bg-calc-surface'}
+        ${className ?? 'rounded-[35px] border border-white/5 p-4 sm:p-5 shadow-calc-shell bg-[var(--bg-color)]'}
       `}
     >
       {/* Header */}
-      <div className="flex items-center justify-between pb-2.5 border-b border-calc-border-subtle/60 mb-2.5 shrink-0 select-none">
+      <div className="flex items-center justify-between pb-2.5 border-b border-black/5 dark:border-white/5 mb-3 shrink-0 select-none">
         <div className="flex items-center gap-2">
           <span className="relative flex h-2 w-2">
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-calc-accent" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--op-right-color)]" />
           </span>
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-calc-text-primary">
+          <h2 className="font-orbitron text-xs font-bold uppercase tracking-wider text-[var(--text-color)]">
             Unit Converter
           </h2>
         </div>
@@ -159,10 +158,9 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
             title="Reset conversion input"
             aria-label="Reset conversion input"
             className="
-              min-h-[32px] px-2 py-0.5 text-[11px] rounded-md font-medium transition-colors
-              text-calc-text-muted hover:text-calc-text-primary hover:bg-calc-surface-secondary
-              border border-calc-border-subtle hover:border-calc-border-strong
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+              neumorphic-btn min-h-[30px] px-3 py-1 text-[11px] rounded-full font-orbitron font-medium transition-all
+              text-[var(--history-color)] hover:text-[var(--text-color)]
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
             "
           >
             Reset
@@ -175,10 +173,9 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
               aria-label="Close unit converter"
               title="Close unit converter"
               className="
-                min-h-[32px] min-w-[32px] p-1 text-xs rounded-md font-medium transition-colors flex items-center justify-center
-                text-calc-text-muted hover:text-calc-text-primary hover:bg-calc-surface-secondary
-                border border-calc-border-subtle hover:border-calc-border-strong
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+                neumorphic-btn min-h-[30px] min-w-[30px] p-1 text-xs rounded-full font-medium transition-all flex items-center justify-center
+                text-[var(--history-color)] hover:text-[var(--text-color)]
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
               "
             >
               <svg
@@ -201,7 +198,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
       </div>
 
       {/* Category Tabs */}
-      <div className="shrink-0 mb-2.5">
+      <div className="shrink-0 mb-3">
         <CategorySelector
           categories={CATEGORIES}
           selectedCategoryId={selectedCategoryId}
@@ -210,7 +207,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
       </div>
 
       {/* Converter Body */}
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-3">
         {/* Currency Status Banner */}
         {selectedCategoryId === 'currency' && (
           <CurrencyStatus state={currencyState} onRetry={fetchCurrencyRates} />
@@ -218,10 +215,10 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
 
         {/* Numeric Input */}
         <div className="flex flex-col gap-1">
-          <div className="flex items-center justify-between text-[11px] font-semibold uppercase tracking-wider text-calc-text-secondary">
+          <div className="flex items-center justify-between font-orbitron text-[10px] font-bold uppercase tracking-wider text-[var(--history-color)]">
             <span>Value</span>
             {fromUnit && (
-              <span className="text-calc-text-muted font-normal truncate max-w-[200px]">
+              <span className="font-poppins text-[var(--history-color)] opacity-70 font-normal truncate max-w-[200px]">
                 {fromUnit.label} ({fromUnit.symbol})
               </span>
             )}
@@ -235,10 +232,10 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
               onChange={(e) => setInputValue(e.target.value)}
               placeholder="Enter value..."
               className="
-                w-full min-h-[40px] xs:min-h-[42px] sm:min-h-[44px] px-3 py-1.5 rounded-calc-md border border-calc-border-subtle
-                bg-calc-surface-secondary text-calc-text-primary text-base sm:text-lg font-mono
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
-                transition-colors placeholder:text-calc-text-muted/50
+                w-full min-h-[44px] px-3.5 py-2 rounded-2xl neumorphic-inset
+                text-[var(--text-color)] text-base sm:text-lg font-orbitron font-semibold
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
+                transition-all placeholder:text-[var(--history-color)]/40
               "
             />
             {inputValue && (
@@ -248,8 +245,8 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
                 aria-label="Clear input"
                 title="Clear input"
                 className="
-                  absolute inset-y-0 right-0 px-2.5 flex items-center text-calc-text-muted
-                  hover:text-calc-text-primary transition-colors
+                  absolute inset-y-0 right-0 px-3 flex items-center text-[var(--history-color)]
+                  hover:text-[var(--text-color)] transition-colors
                 "
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -261,7 +258,7 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
         </div>
 
         {/* From & To Unit Selection with Swap Button */}
-        <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-1.5 xs:gap-2">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-2">
           <UnitSelect
             id="converter-from-unit"
             label="From"
@@ -278,10 +275,10 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
               aria-label="Swap From and To units"
               title="Swap From and To units"
               className="
-                min-h-[40px] min-w-[36px] xs:min-w-[40px] sm:min-h-[44px] p-2 rounded-calc-md border border-calc-border-subtle
-                bg-calc-surface-secondary hover:bg-calc-surface-elevated text-calc-text-secondary hover:text-calc-text-primary
-                flex items-center justify-center transition-transform duration-150 active:rotate-180
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+                neumorphic-btn min-h-[40px] min-w-[40px] p-2 rounded-full
+                text-[var(--history-color)] hover:text-[var(--op-right-color)]
+                flex items-center justify-center transition-transform duration-200 active:rotate-180
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
               "
             >
               <svg
@@ -316,19 +313,19 @@ export const UnitConverter: React.FC<UnitConverterProps> = React.memo(({
 
         {/* Quick Value Presets */}
         <div className="pt-0.5">
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-calc-text-muted mb-1 block">
+          <span className="font-orbitron text-[10px] font-bold uppercase tracking-wider text-[var(--history-color)] mb-1.5 block">
             Quick Values
           </span>
-          <div className="grid grid-cols-5 gap-1.5">
+          <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
             {['1', '5', '10', '50', '100'].map((preset) => (
               <button
                 key={preset}
                 type="button"
                 onClick={() => setInputValue(preset)}
                 className="
-                  min-h-[32px] xs:min-h-[36px] py-1 text-xs font-mono font-medium rounded-calc-sm
-                  bg-calc-surface-secondary/70 hover:bg-calc-surface-elevated text-calc-text-secondary hover:text-calc-text-primary
-                  border border-calc-border-subtle transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-calc-accent
+                  neumorphic-btn min-h-[32px] xs:min-h-[34px] py-1 text-xs font-orbitron font-medium rounded-full
+                  text-[var(--history-color)] hover:text-[var(--text-color)]
+                  transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--op-right-color)]
                 "
               >
                 {preset}

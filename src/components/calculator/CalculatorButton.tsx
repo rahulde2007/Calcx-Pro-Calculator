@@ -14,39 +14,31 @@ export interface CalculatorButtonProps {
   readonly className?: string | undefined;
 }
 
-// Map variant to design token classes (static, allocated once)
+// Map variant to reference neumorphic styles
 const VARIANT_STYLES: Record<ButtonVariant, string> = {
-  number:
-    'bg-calc-key-number text-calc-text-primary hover:bg-calc-key-number-hover border border-calc-border-subtle shadow-calc-button',
-  digit:
-    'bg-calc-key-number text-calc-text-primary hover:bg-calc-key-number-hover border border-calc-border-subtle shadow-calc-button',
-  operator:
-    'bg-calc-key-operator text-white font-semibold hover:bg-calc-key-operator-hover border border-amber-400/20 shadow-calc-button',
-  function:
-    'bg-calc-key-action text-calc-text-secondary hover:bg-calc-key-action-hover hover:text-calc-text-primary border border-calc-border-subtle shadow-calc-button',
-  action:
-    'bg-calc-key-action text-calc-text-secondary hover:bg-calc-key-action-hover hover:text-calc-text-primary border border-calc-border-subtle shadow-calc-button',
-  danger:
-    'bg-rose-950/40 text-rose-300 hover:bg-rose-900/60 border border-rose-800/40 shadow-calc-button',
-  equals:
-    'bg-calc-key-equals text-white font-bold hover:bg-calc-key-equals-hover border border-blue-400/30 shadow-calc-equals',
-  special:
-    'bg-calc-surface text-calc-text-muted hover:bg-calc-surface-elevated hover:text-calc-text-secondary border border-calc-border-subtle',
-  secondary:
-    'bg-calc-key-action text-calc-text-secondary hover:bg-calc-key-action-hover hover:text-calc-text-primary border border-calc-border-subtle shadow-calc-button',
+  number: 'text-[var(--text-color)] font-medium',
+  digit: 'text-[var(--text-color)] font-medium',
+  operator: 'text-[var(--op-right-color)] font-normal text-xl sm:text-2xl',
+  function: 'text-[var(--op-top-color)] font-semibold text-sm sm:text-base',
+  action: 'text-[var(--op-top-color)] font-semibold text-sm sm:text-base',
+  danger: 'text-[var(--ac-color)] font-bold text-base sm:text-lg',
+  equals: 'neumorphic-btn-equals font-bold text-xl sm:text-2xl',
+  special: 'text-[var(--text-color)] font-medium text-sm sm:text-base',
+  secondary: 'text-[var(--op-top-color)] font-medium text-xs sm:text-sm',
 };
 
 const SPAN_CLASSES: Record<number, string> = {
-  1: 'col-span-1',
-  2: 'col-span-2',
-  3: 'col-span-3',
-  4: 'col-span-4',
+  1: 'col-span-1 aspect-square',
+  2: 'col-span-2 aspect-auto rounded-full px-5 justify-start',
+  3: 'col-span-3 aspect-auto rounded-full px-5',
+  4: 'col-span-4 aspect-auto rounded-full px-6',
 };
 
 /**
- * Premium Calculator Button primitive.
- * Supports design tokens, tactile micro-interactions, responsive sizing,
- * memoization, and WCAG AA accessibility focus rings.
+ * Neumorphic Calculator Button primitive matching reference design.
+ * Features soft raised and inset shadows, active transform scaling,
+ * variant colors (numbers, right-ops, top-ops, AC danger, equals),
+ * Orbitron styling for dots, and WCAG AA accessibility focus rings.
  */
 export const CalculatorButton: React.FC<CalculatorButtonProps> = React.memo(({
   id,
@@ -61,13 +53,15 @@ export const CalculatorButton: React.FC<CalculatorButtonProps> = React.memo(({
   className = '',
 }) => {
   const computedAriaLabel = ariaLabel ?? (typeof label === 'string' ? label : undefined);
+  const isEquals = variant === 'equals';
+  const isDot = id === 'btn-decimal' || label === '.';
+
+  // Sizing: default aspect-square or stretch for spanned rows
   const hasCustomHeight = Boolean(className && (className.includes('h-') || className.includes('min-h-')));
-  const defaultHeightClass = hasCustomHeight ? '' : 'h-14 sm:h-16';
+  const defaultHeightClass = hasCustomHeight ? '' : (spanCols > 1 ? 'h-12 xs:h-13 sm:h-14' : 'w-full');
 
   const hasCustomText = Boolean(className && className.includes('text-'));
-  const defaultTextClass = hasCustomText ? '' : 'text-lg sm:text-xl';
-
-  const isEquals = variant === 'equals';
+  const defaultTextClass = hasCustomText ? '' : (isDot ? 'font-orbitron font-bold text-2xl pb-1' : 'text-base sm:text-lg');
 
   return (
     <button
@@ -77,34 +71,28 @@ export const CalculatorButton: React.FC<CalculatorButtonProps> = React.memo(({
       onClick={onClick}
       aria-label={computedAriaLabel}
       className={`
-        calc-neon-btn
-        ${isEquals ? 'calc-neon-btn-equals' : ''}
+        neumorphic-btn
+        ${isEquals ? 'neumorphic-btn-equals' : ''}
         group relative flex items-center justify-center
-        ${defaultHeightClass} w-full rounded-calc-button
-        font-sans font-medium ${defaultTextClass}
-        select-none transition-transform duration-75 ease-out
-        active:scale-[0.96] active:brightness-95 active:shadow-calc-button-active
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent focus-visible:ring-offset-2 focus-visible:ring-offset-calc-surface
-        disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100
-        motion-reduce:transition-none motion-reduce:active:scale-100
-        ${VARIANT_STYLES[variant]}
+        ${defaultHeightClass}
         ${SPAN_CLASSES[spanCols] ?? 'col-span-1'}
-        ${isHighlighted ? 'ring-2 ring-calc-accent ring-offset-1 ring-offset-calc-surface' : ''}
+        ${VARIANT_STYLES[variant]}
+        ${defaultTextClass}
+        select-none
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-color)]
+        disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none
+        motion-reduce:transition-none motion-reduce:active:transform-none
+        ${isHighlighted ? 'ring-2 ring-[var(--op-right-color)] ring-offset-2 ring-offset-[var(--bg-color)]' : ''}
         ${className}
       `}
     >
-      {/* Neon border tracer highlight */}
-      {!disabled && (
-        <span className="calc-neon-border-tracer" aria-hidden="true" />
-      )}
-
       <span className="relative z-10 flex items-center justify-center gap-1">
         {label}
       </span>
 
       {/* Optional sub-label (e.g. keyboard shortcut or alternate operation) */}
       {subLabel && (
-        <span className="absolute bottom-1 right-2 z-10 text-[10px] font-mono text-calc-text-muted group-hover:text-calc-text-secondary transition-colors">
+        <span className="absolute bottom-1 right-2 z-10 text-[9px] sm:text-[10px] font-mono text-[var(--history-color)] opacity-70 group-hover:opacity-100 transition-opacity">
           {subLabel}
         </span>
       )}

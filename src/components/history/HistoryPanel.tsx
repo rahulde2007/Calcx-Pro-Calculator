@@ -15,10 +15,9 @@ export interface HistoryPanelProps {
 }
 
 /**
- * History panel drawer component adhering to Calcx-Pro design tokens.
+ * History panel drawer component adhering to reference neumorphic tokens.
  * Supports individual item deletion, copy actions, RFC 4180 CSV export,
  * and a modal confirmation for clearing all history.
- * Memoized for smooth, jank-free performance.
  */
 export const HistoryPanel: React.FC<HistoryPanelProps> = React.memo(({
   items,
@@ -50,18 +49,18 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = React.memo(({
       <aside
         aria-label="Calculation History"
         className={`
-          w-full bg-calc-surface flex flex-col h-full
-          ${className ?? 'rounded-calc-shell border border-calc-border-subtle p-4 sm:p-5 shadow-calc-shell'}
+          w-full bg-[var(--bg-color)] flex flex-col h-full
+          ${className ?? 'rounded-[35px] border border-white/5 p-4 sm:p-5 shadow-calc-shell'}
         `}
       >
         {/* Header with Title, Count Badge, Export, Clear, and Close Actions */}
-        <div className="flex items-center justify-between pb-3 border-b border-calc-border-subtle mb-3 shrink-0">
+        <div className="flex items-center justify-between pb-3 border-b border-black/5 dark:border-white/5 mb-3 shrink-0">
           <div className="flex items-center gap-2">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-calc-text-secondary">
+            <h3 className="font-orbitron text-xs font-bold uppercase tracking-wider text-[var(--history-color)]">
               History
             </h3>
             {items.length > 0 && (
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded-full bg-calc-surface-secondary border border-calc-border-subtle text-calc-text-muted">
+              <span className="text-[10px] font-orbitron px-2 py-0.5 rounded-full neumorphic-inset text-[var(--op-right-color)] font-bold">
                 {items.length}
               </span>
             )}
@@ -76,11 +75,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = React.memo(({
               aria-label="Export history as CSV"
               title={items.length === 0 ? 'No history to export' : 'Export history as CSV'}
               className="
-                min-h-[36px] px-3 py-1.5 text-xs rounded-md font-medium transition-colors flex items-center justify-center
-                bg-calc-surface-secondary text-calc-text-secondary border border-calc-border-subtle
-                hover:bg-calc-surface-elevated hover:text-calc-text-primary
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
-                disabled:opacity-40 disabled:cursor-not-allowed
+                neumorphic-btn min-h-[34px] px-3 py-1 text-xs rounded-full font-orbitron font-medium transition-all flex items-center justify-center
+                text-[var(--history-color)] hover:text-[var(--text-color)]
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
+                disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:transform-none
               "
             >
               Export
@@ -93,9 +91,9 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = React.memo(({
                 onClick={() => setIsConfirmModalOpen(true)}
                 aria-label="Clear all calculation history"
                 className="
-                  min-h-[36px] px-3 py-1.5 text-xs rounded-md font-medium transition-colors flex items-center justify-center
-                  text-rose-400 hover:text-rose-300 hover:bg-rose-950/30
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500
+                  neumorphic-btn min-h-[34px] px-3 py-1 text-xs rounded-full font-orbitron font-semibold transition-all flex items-center justify-center
+                  text-[var(--ac-color)]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ac-color)]
                 "
               >
                 Clear
@@ -110,15 +108,14 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = React.memo(({
                 aria-label="Close history panel"
                 title="Close history panel"
                 className="
-                  min-h-[36px] min-w-[36px] p-1.5 text-xs rounded-md font-medium transition-colors flex items-center justify-center
-                  text-calc-text-muted hover:text-calc-text-primary hover:bg-calc-surface-secondary
-                  border border-calc-border-subtle hover:border-calc-border-strong
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+                  neumorphic-btn min-h-[34px] min-w-[34px] p-1.5 text-xs rounded-full font-medium transition-all flex items-center justify-center
+                  text-[var(--history-color)] hover:text-[var(--text-color)]
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
                 "
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
+                  className="h-3.5 w-3.5"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -136,14 +133,14 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = React.memo(({
         </div>
 
         {/* Scrollable Calculation List with touch optimization */}
-        <div className="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-thin smooth-scroll">
+        <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin smooth-scroll">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-56 text-center p-4 select-none">
-              <div className="w-10 h-10 rounded-full bg-calc-surface-secondary border border-calc-border-subtle flex items-center justify-center text-calc-text-muted mb-2 text-base">
+              <div className="w-12 h-12 rounded-full neumorphic-inset flex items-center justify-center text-[var(--history-color)] mb-2.5 text-lg">
                 ⏱
               </div>
-              <span className="text-xs font-medium text-calc-text-secondary">No calculations yet</span>
-              <span className="text-[11px] text-calc-text-muted mt-1 max-w-[200px] leading-relaxed">
+              <span className="text-xs font-orbitron font-semibold text-[var(--history-color)]">No calculations yet</span>
+              <span className="text-[11px] font-poppins text-[var(--history-color)] opacity-70 mt-1 max-w-[200px] leading-relaxed">
                 Evaluations performed in standard or scientific mode will appear here.
               </span>
             </div>
@@ -167,7 +164,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = React.memo(({
         title="Clear Calculation History"
       >
         <div className="space-y-4">
-          <p className="text-xs text-calc-text-secondary leading-relaxed">
+          <p className="text-xs font-poppins text-[var(--history-color)] leading-relaxed">
             Are you sure you want to clear all {items.length} calculation record{items.length === 1 ? '' : 's'}?
             This will permanently remove saved history. Your current calculator display, expression, and memory will not be affected.
           </p>
@@ -178,9 +175,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = React.memo(({
               autoFocus
               onClick={() => setIsConfirmModalOpen(false)}
               className="
-                min-h-[44px] px-4 py-2.5 text-xs font-medium rounded-calc-md bg-calc-surface-secondary
-                text-calc-text-primary border border-calc-border-subtle hover:bg-calc-surface-elevated
-                transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+                neumorphic-btn min-h-[40px] px-5 py-2 text-xs font-orbitron font-medium rounded-full
+                text-[var(--text-color)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
               "
             >
               Cancel
@@ -189,9 +185,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = React.memo(({
               type="button"
               onClick={handleConfirmClear}
               className="
-                min-h-[44px] px-4 py-2.5 text-xs font-medium rounded-calc-md bg-rose-600 text-white
-                hover:bg-rose-500 transition-colors shadow-sm
-                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400
+                neumorphic-btn min-h-[40px] px-5 py-2 text-xs font-orbitron font-bold rounded-full bg-[var(--ac-color)] text-white
+                transition-all shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ac-color)]
               "
             >
               Clear All History

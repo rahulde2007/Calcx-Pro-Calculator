@@ -9,10 +9,9 @@ export interface HistoryItemProps {
 }
 
 /**
- * Renders an individual calculation entry matching Calcx-Pro design tokens.
+ * Renders an individual calculation entry matching reference neumorphic styling.
  * Features quick reuse, copy result, copy expression, individual deletion,
  * accessible feedback, and WCAG AA minimum 44px touch targets.
- * Memoized to prevent re-rendering unaffected items when history changes.
  */
 export const HistoryItem: React.FC<HistoryItemProps> = React.memo(({
   item,
@@ -56,9 +55,8 @@ export const HistoryItem: React.FC<HistoryItemProps> = React.memo(({
       role="group"
       aria-label={`Calculation: ${item.expression} = ${item.result}`}
       className="
-        group relative rounded-calc-md bg-calc-surface-secondary hover:bg-calc-surface-elevated
-        border border-calc-border-subtle p-3 transition-colors duration-100 shadow-sm
-        flex flex-col gap-2
+        group relative rounded-2xl neumorphic-inset p-3 transition-all duration-200
+        flex flex-col gap-2 border border-white/5
       "
     >
       {/* Primary Clickable Area for Calculation Reuse */}
@@ -74,20 +72,20 @@ export const HistoryItem: React.FC<HistoryItemProps> = React.memo(({
         }}
         aria-label={`Reuse calculation: ${item.expression} = ${item.result}`}
         className="
-          w-full text-right cursor-pointer select-none rounded p-1
-          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+          w-full text-right cursor-pointer select-none rounded-xl p-1
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
         "
       >
-        <div className="text-xs font-mono-calc text-calc-text-secondary truncate tracking-wide">
+        <div className="text-xs font-orbitron text-[var(--history-color)] truncate tracking-wider">
           {item.expression}
         </div>
-        <div className="text-base font-semibold font-mono-calc text-calc-text-primary mt-0.5 tracking-tight truncate">
+        <div className="text-base font-bold font-orbitron text-[var(--text-color)] mt-0.5 tracking-wide truncate">
           = {item.result}
         </div>
       </div>
 
       {/* Action Toolbar */}
-      <div className="flex items-center justify-between pt-1 border-t border-calc-border-subtle/50 text-xs">
+      <div className="flex items-center justify-between pt-1 border-t border-black/5 dark:border-white/5 text-xs">
         {/* Left Action: Reuse */}
         <button
           type="button"
@@ -95,9 +93,9 @@ export const HistoryItem: React.FC<HistoryItemProps> = React.memo(({
           aria-label="Reuse calculation"
           title="Recall into calculator"
           className="
-            min-h-[44px] min-w-[44px] px-2 py-1.5 rounded-md flex items-center justify-center gap-1
-            text-[11px] font-medium text-calc-text-muted hover:text-calc-accent hover:bg-calc-surface
-            transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+            min-h-[38px] min-w-[38px] px-2.5 py-1 rounded-full flex items-center justify-center gap-1
+            text-[11px] font-orbitron font-medium text-[var(--history-color)] hover:text-[var(--op-right-color)]
+            transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
           "
         >
           <span aria-hidden="true" className="text-sm">↺</span>
@@ -105,7 +103,7 @@ export const HistoryItem: React.FC<HistoryItemProps> = React.memo(({
         </button>
 
         {/* Right Actions: Copy Result, Copy Expr, Delete */}
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-1">
           {/* Copy Result */}
           <button
             type="button"
@@ -113,12 +111,12 @@ export const HistoryItem: React.FC<HistoryItemProps> = React.memo(({
             aria-label={copiedTarget === 'result' ? 'Result copied to clipboard' : 'Copy result'}
             title="Copy result"
             className={`
-              min-h-[44px] min-w-[44px] px-2 py-1.5 rounded-md flex items-center justify-center gap-1
-              text-[11px] font-mono transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+              min-h-[38px] px-2.5 py-1 rounded-full flex items-center justify-center gap-1
+              text-[11px] font-orbitron transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
               ${
                 copiedTarget === 'result'
-                  ? 'text-emerald-400 bg-emerald-500/10 font-bold'
-                  : 'text-calc-text-muted hover:text-calc-text-primary hover:bg-calc-surface'
+                  ? 'text-emerald-400 font-bold bg-emerald-500/10'
+                  : 'text-[var(--history-color)] hover:text-[var(--text-color)]'
               }
             `}
           >
@@ -142,12 +140,12 @@ export const HistoryItem: React.FC<HistoryItemProps> = React.memo(({
             aria-label={copiedTarget === 'expression' ? 'Expression copied to clipboard' : 'Copy expression'}
             title="Copy expression"
             className={`
-              min-h-[44px] min-w-[44px] px-2 py-1.5 rounded-md flex items-center justify-center gap-1
-              text-[11px] font-mono transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent
+              min-h-[38px] px-2.5 py-1 rounded-full flex items-center justify-center gap-1
+              text-[11px] font-orbitron transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
               ${
                 copiedTarget === 'expression'
-                  ? 'text-emerald-400 bg-emerald-500/10 font-bold'
-                  : 'text-calc-text-muted hover:text-calc-text-primary hover:bg-calc-surface'
+                  ? 'text-emerald-400 font-bold bg-emerald-500/10'
+                  : 'text-[var(--history-color)] hover:text-[var(--text-color)]'
               }
             `}
           >
@@ -171,9 +169,9 @@ export const HistoryItem: React.FC<HistoryItemProps> = React.memo(({
             aria-label="Delete history item"
             title="Delete item"
             className="
-              min-h-[44px] min-w-[44px] p-2 rounded-md flex items-center justify-center
-              text-calc-text-muted hover:text-rose-400 hover:bg-rose-500/10
-              transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500
+              min-h-[38px] min-w-[38px] p-2 rounded-full flex items-center justify-center
+              text-[var(--history-color)] hover:text-[var(--ac-color)]
+              transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ac-color)]
             "
           >
             <span aria-hidden="true" className="text-sm font-semibold">✕</span>

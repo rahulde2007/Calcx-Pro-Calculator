@@ -62,7 +62,7 @@ export function applyThemeToDocument(resolvedTheme: ResolvedTheme): void {
   // Dynamically update theme-color meta tag for mobile browser status bar tinting
   const metaThemeColor = document.querySelector('meta[name="theme-color"]');
   if (metaThemeColor) {
-    metaThemeColor.setAttribute('content', resolvedTheme === 'dark' ? '#090D16' : '#F8FAFC');
+    metaThemeColor.setAttribute('content', resolvedTheme === 'dark' ? '#24252a' : '#e0e5ec');
   }
 }
 

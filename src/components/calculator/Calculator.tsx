@@ -77,37 +77,35 @@ const CalculatorView: React.FC<CalculatorViewProps> = React.memo(({
   return (
     <div
       className={`
-        relative w-full flex-1 min-h-0
-        rounded-calc-shell bg-calc-surface
-        border border-calc-border-subtle
+        calculator relative w-full flex-1 min-h-0
+        rounded-[35px] bg-[var(--bg-color)]
+        border border-white/5
         shadow-calc-shell
         flex flex-col
+        transition-all duration-500
         ${isScientific
-          ? 'p-2.5 xs:p-3 sm:p-4 gap-1.5 xs:gap-2 sm:gap-2.5'
-          : 'p-3 sm:p-4 gap-2.5 sm:gap-3'}
+          ? 'p-3 xs:p-4 sm:p-5 gap-2 xs:gap-2.5 sm:gap-3'
+          : 'p-4 xs:p-5 sm:p-6 gap-3 xs:gap-3.5 sm:gap-4'}
       `}
     >
-      {/* Decorative top ambient rim highlight */}
-      <div className="absolute -top-px left-12 right-12 h-px bg-gradient-to-r from-transparent via-calc-accent/40 to-transparent pointer-events-none" />
-
       {/* Header / Utility Bar */}
       <header className="flex items-center justify-between px-1 select-none">
         {/* Brand Beacon */}
         <div className="flex items-center gap-2">
-          <span className="relative flex h-2.5 w-2.5">
+          <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
-          <span className="text-xs font-semibold tracking-wider text-calc-text-primary uppercase">
-            Calcx<span className="text-calc-accent ml-0.5">Pro</span>
+          <span className="font-orbitron text-xs font-bold tracking-wider text-[var(--text-color)] uppercase">
+            Calcx<span className="text-[var(--op-right-color)] ml-0.5">Pro</span>
           </span>
         </div>
 
-        {/* Mode Selector Tabs */}
+        {/* Mode Selector Tabs (Segmented Inset Pill) */}
         <div
           role="tablist"
           aria-label="Calculator Modes"
-          className="flex items-center p-0.5 rounded-lg bg-calc-surface-secondary border border-calc-border-subtle"
+          className="flex items-center p-0.5 sm:p-1 rounded-full neumorphic-inset"
         >
           <button
             type="button"
@@ -115,10 +113,10 @@ const CalculatorView: React.FC<CalculatorViewProps> = React.memo(({
             aria-selected={!isConverterOpen && state.mode === 'standard'}
             onClick={handleSetStandard}
             className={`
-              min-h-[36px] px-3 py-1 text-[11px] font-medium rounded-md transition-colors duration-100 flex items-center justify-center
+              min-h-[30px] sm:min-h-[32px] px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-medium rounded-full transition-all duration-200 flex items-center justify-center font-orbitron
               ${!isConverterOpen && state.mode === 'standard'
-                ? 'bg-calc-accent text-white shadow-sm font-semibold'
-                : 'text-calc-text-secondary hover:text-calc-text-primary'}
+                ? 'bg-[var(--op-right-color)] text-white shadow-sm font-bold'
+                : 'text-[var(--history-color)] hover:text-[var(--text-color)]'}
             `}
           >
             Standard
@@ -129,10 +127,10 @@ const CalculatorView: React.FC<CalculatorViewProps> = React.memo(({
             aria-selected={!isConverterOpen && state.mode === 'scientific'}
             onClick={handleSetScientific}
             className={`
-              min-h-[36px] px-3 py-1 text-[11px] font-medium rounded-md transition-colors duration-100 flex items-center justify-center
+              min-h-[30px] sm:min-h-[32px] px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-medium rounded-full transition-all duration-200 flex items-center justify-center font-orbitron
               ${!isConverterOpen && state.mode === 'scientific'
-                ? 'bg-calc-accent text-white shadow-sm font-semibold'
-                : 'text-calc-text-secondary hover:text-calc-text-primary'}
+                ? 'bg-[var(--op-right-color)] text-white shadow-sm font-bold'
+                : 'text-[var(--history-color)] hover:text-[var(--text-color)]'}
             `}
           >
             Scientific
@@ -144,10 +142,10 @@ const CalculatorView: React.FC<CalculatorViewProps> = React.memo(({
               aria-selected={isConverterOpen}
               onClick={onOpenConverter}
               className={`
-                min-h-[36px] px-3 py-1 text-[11px] font-medium rounded-md transition-colors duration-100 flex items-center justify-center
+                min-h-[30px] sm:min-h-[32px] px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-medium rounded-full transition-all duration-200 flex items-center justify-center font-orbitron
                 ${isConverterOpen
-                  ? 'bg-calc-accent text-white shadow-sm font-semibold'
-                  : 'text-calc-text-secondary hover:text-calc-text-primary'}
+                  ? 'bg-[var(--op-right-color)] text-white shadow-sm font-bold'
+                  : 'text-[var(--history-color)] hover:text-[var(--text-color)]'}
               `}
             >
               Converter
@@ -222,7 +220,7 @@ const CalculatorView: React.FC<CalculatorViewProps> = React.memo(({
       </section>
 
       {/* Footer status readout */}
-      <div className="flex items-center justify-between px-2 pt-1 border-t border-calc-border-subtle/50 text-[10px] font-mono text-calc-text-muted">
+      <div className="flex items-center justify-between px-2 pt-1.5 border-t border-black/5 dark:border-white/5 text-[9px] sm:text-[10px] font-orbitron tracking-wider text-[var(--history-color)] opacity-80">
         <span className="uppercase">
           MODE: {state.mode} &bull; STATUS: {state.status}
         </span>

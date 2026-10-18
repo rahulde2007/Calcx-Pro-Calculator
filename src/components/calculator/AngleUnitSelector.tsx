@@ -20,9 +20,8 @@ const UNITS: readonly UnitOption[] = [
 ];
 
 /**
- * Premium, accessible segmented angle unit selector for Scientific Mode.
+ * Neumorphic segmented angle unit selector for Scientific Mode.
  * Controls trigonometric evaluation mode across DEG, RAD, and GRAD.
- * Memoized to prevent re-renders when numbers are typed.
  */
 export const AngleUnitSelector: React.FC<AngleUnitSelectorProps> = React.memo(({
   currentUnit,
@@ -34,9 +33,8 @@ export const AngleUnitSelector: React.FC<AngleUnitSelectorProps> = React.memo(({
       role="radiogroup"
       aria-label="Angle measurement unit"
       className={`
-        flex items-center justify-between p-0.5 sm:p-1 rounded-calc-md
-        bg-calc-surface-secondary border border-calc-border-subtle
-        shadow-sm w-full
+        flex items-center justify-between p-1 rounded-full
+        neumorphic-inset w-full
         ${className}
       `}
     >
@@ -51,13 +49,13 @@ export const AngleUnitSelector: React.FC<AngleUnitSelectorProps> = React.memo(({
             aria-label={unit.ariaLabel}
             onClick={() => onSelectUnit(unit.id)}
             className={`
-              flex-1 min-h-[32px] sm:min-h-[36px] flex items-center justify-center py-1 sm:py-1.5 px-2 text-[11px] sm:text-xs font-mono font-semibold tracking-wider rounded
-              select-none transition-colors duration-100 ease-out text-center
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-calc-accent focus-visible:ring-offset-1 focus-visible:ring-offset-calc-surface
-              active:scale-[0.98]
+              flex-1 min-h-[30px] sm:min-h-[34px] flex items-center justify-center py-1 px-2 text-[10px] sm:text-xs font-orbitron font-semibold tracking-wider rounded-full
+              select-none transition-all duration-200 ease-out text-center
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--op-right-color)]
+              active:scale-[0.96]
               ${isActive
-                ? 'bg-calc-accent text-white shadow-calc-button font-bold'
-                : 'text-calc-text-muted hover:text-calc-text-primary hover:bg-calc-surface-elevated/60'}
+                ? 'bg-[var(--op-right-color)] text-white shadow-sm font-bold'
+                : 'text-[var(--history-color)] hover:text-[var(--text-color)]'}
             `}
           >
             {unit.label}

@@ -12,9 +12,8 @@ export interface MemoryControlsProps {
 }
 
 /**
- * Compact memory control bar (MC, MR, M+, M−).
- * Integrates seamlessly above keypads in both Standard and Scientific modes.
- * Memoized to prevent re-rendering when typing.
+ * Compact neumorphic memory control bar (MC, MR, M+, M−).
+ * Integrates cleanly above keypads in both Standard and Scientific modes.
  */
 export const MemoryControls: React.FC<MemoryControlsProps> = React.memo(({
   hasMemory,
@@ -25,8 +24,8 @@ export const MemoryControls: React.FC<MemoryControlsProps> = React.memo(({
   className = '',
   isCompact = false,
 }) => {
-  const btnHeightClass = isCompact ? 'h-7 sm:h-8 text-xs' : 'h-8 sm:h-9 text-xs sm:text-sm';
-  const gapClass = isCompact ? 'gap-1 xs:gap-1.5' : 'gap-1.5 sm:gap-2';
+  const btnHeightClass = isCompact ? 'h-7 sm:h-8 text-[11px]' : 'h-8 sm:h-9 text-xs sm:text-sm';
+  const gapClass = isCompact ? 'gap-1.5 xs:gap-2' : 'gap-2 sm:gap-3';
 
   return (
     <div
@@ -39,8 +38,8 @@ export const MemoryControls: React.FC<MemoryControlsProps> = React.memo(({
         label="MC"
         ariaLabel="Memory Clear"
         variant="secondary"
-        className={`${btnHeightClass} font-mono font-medium tracking-wide ${
-          hasMemory ? 'text-calc-text-primary hover:text-rose-400' : 'text-calc-text-muted opacity-70'
+        className={`${btnHeightClass} font-orbitron font-semibold tracking-wider rounded-full ${
+          hasMemory ? 'text-[var(--ac-color)]' : 'text-[var(--history-color)] opacity-60'
         }`}
         onClick={onMemoryClear}
       />
@@ -49,8 +48,8 @@ export const MemoryControls: React.FC<MemoryControlsProps> = React.memo(({
         label="MR"
         ariaLabel="Memory Recall"
         variant="secondary"
-        className={`${btnHeightClass} font-mono font-medium tracking-wide ${
-          hasMemory ? 'text-calc-accent font-semibold' : 'text-calc-text-muted opacity-70'
+        className={`${btnHeightClass} font-orbitron font-bold tracking-wider rounded-full ${
+          hasMemory ? 'text-[var(--op-right-color)]' : 'text-[var(--history-color)] opacity-60'
         }`}
         onClick={onMemoryRecall}
       />
@@ -59,7 +58,7 @@ export const MemoryControls: React.FC<MemoryControlsProps> = React.memo(({
         label="M+"
         ariaLabel="Memory Add"
         variant="secondary"
-        className={`${btnHeightClass} font-mono font-medium tracking-wide text-calc-text-primary hover:text-emerald-400`}
+        className={`${btnHeightClass} font-orbitron font-semibold tracking-wider rounded-full text-[var(--text-color)] hover:text-[var(--op-right-color)]`}
         onClick={onMemoryAdd}
       />
       <CalculatorButton
@@ -67,7 +66,7 @@ export const MemoryControls: React.FC<MemoryControlsProps> = React.memo(({
         label="M−"
         ariaLabel="Memory Subtract"
         variant="secondary"
-        className={`${btnHeightClass} font-mono font-medium tracking-wide text-calc-text-primary hover:text-amber-400`}
+        className={`${btnHeightClass} font-orbitron font-semibold tracking-wider rounded-full text-[var(--text-color)] hover:text-[var(--op-right-color)]`}
         onClick={onMemorySubtract}
       />
     </div>

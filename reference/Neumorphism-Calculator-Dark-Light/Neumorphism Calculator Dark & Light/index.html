@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Neumorphism Calculator Dark/Light Theme | @coding.stella</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Poppins:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  
+  <!-- Glowing Orbs Background -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="theme-switch-wrapper">
+    <span class="theme-label" id="theme-label">NORMAL MODE</span>
+    <label class="theme-switch" for="checkbox">
+      <input type="checkbox" id="checkbox" />
+      <div class="slider round"></div>
+    </label>
+  </div>
+
+  <div class="calculator">
+    <!-- Frosted Glass Display with digital reflection -->
+    <div class="display">
+      <div class="glass-reflection"></div>
+      <div id="history"></div>
+      <div id="value">0</div>
+    </div>
+    
+    <!-- Neumorphic Buttons Grid -->
+    <div class="buttons">
+      <!-- Row 1 -->
+      <button class="operator top-op" data-action="clear" id="clear">AC</button>
+      <button class="operator top-op" data-action="+/-">+/-</button>
+      <button class="operator top-op" data-action="%">%</button>
+      <button class="operator right-op" data-action="/">÷</button>
+      
+      <!-- Row 2 -->
+      <button class="num">7</button>
+      <button class="num">8</button>
+      <button class="num">9</button>
+      <button class="operator right-op" data-action="*">×</button>
+      
+      <!-- Row 3 -->
+      <button class="num">4</button>
+      <button class="num">5</button>
+      <button class="num">6</button>
+      <button class="operator right-op" data-action="-">−</button>
+      
+      <!-- Row 4 -->
+      <button class="num">1</button>
+      <button class="num">2</button>
+      <button class="num">3</button>
+      <button class="operator right-op" data-action="+">+</button>
+      
+      <!-- Row 5 -->
+      <button class="num zero">0</button>
+      <button class="num dot">.</button>
+      <button class="operator right-op equal-btn" data-action="=">=</button>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
